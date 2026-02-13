@@ -95,6 +95,32 @@ function getOrbitRotationY() {
   return (((Math.atan2(m[8], m[0]) * 180 / Math.PI) % 360) + 360) % 360;
 }
 
+// --- Orbit front/back hover gating ---
+// Cards in the back half of the orbit shouldn't be hoverable.
+const orbitCards = orbit ? Array.from(orbit.querySelectorAll('.card')) : [];
+const BACK_HALF_START_DEG = 90;
+const BACK_HALF_END_DEG = 270;
+
+function normalizeAngleDeg(angle) {
+  return (((angle % 360) + 360) % 360);
+}
+
+function updateOrbitCardInteractivity() {
+  if (!orbit || orbitCards.length === 0) return;
+  const orbitAngle = getOrbitRotationY();
+
+  orbitCards.forEach((card, idx) => {
+    const cardAngle = CARD_ANGLES[idx] || 0;
+    const absolute = normalizeAngleDeg(orbitAngle + cardAngle);
+    const isBack = absolute > BACK_HALF_START_DEG && absolute < BACK_HALF_END_DEG;
+    card.classList.toggle('orbit-back', isBack);
+  });
+
+  requestAnimationFrame(updateOrbitCardInteractivity);
+}
+
+updateOrbitCardInteractivity();
+
 function getCardIndex(card) {
   return Array.from(orbit.querySelectorAll('.card')).indexOf(card);
 }
@@ -133,7 +159,7 @@ function bringCardToFront(card) {
     return;
   }
 
-  const duration = Math.max(0.864, Math.min(3.456, (absDelta / 360) * 4.32));
+  const duration = Math.max(0.864, Math.min(3.456, (absDelta / 360) * 4.32)) * 1.5;
   orbit.style.transition = `transform ${duration}s ease-in-out`;
   orbit.style.transform = `rotateY(${targetAngle}deg) rotateX(${targetRotateX}deg)`;
   orbitMode = 'transitioning';
@@ -164,7 +190,7 @@ function resumeOrbitFromAngle(angle) {
 }
 
 // --- Click-and-drag spin ---
-const cardContainer = document.querySelector('.card-container');
+const orbitSun = document.querySelector('.orbit-sun');
 let isDragging = false;
 let dragStartX = 0;
 let dragAngle = 0;
@@ -177,9 +203,7 @@ let momentumRafId = null;
 const BASE_SPEED = 360 / ORBIT_DURATION; // degrees per second
 const FRICTION = 0.97;
 
-cardContainer.addEventListener('mousedown', (e) => {
-  // Don't start drag on links
-  if (e.target.closest('a')) return;
+orbitSun?.addEventListener('mousedown', (e) => {
   
   // Cancel any ongoing momentum
   if (momentumRafId) {
@@ -315,6 +339,10 @@ function updateHoverTarget() {
   const element = document.elementFromPoint(mouseX, mouseY);
   let card = element ? element.closest(".card") : null;
 
+  if (card && card.classList.contains('orbit-back')) {
+    card = null;
+  }
+
   if (card) {
     const rect = card.getBoundingClientRect();
     if (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
@@ -326,6 +354,7 @@ function updateHoverTarget() {
     let topCard = null;
     let topZ = -Infinity;
     cards.forEach((candidate) => {
+      if (candidate.classList.contains('orbit-back')) return;
       const rect = candidate.getBoundingClientRect();
       if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
         const zIndex = parseFloat(window.getComputedStyle(candidate).zIndex) || 0;
