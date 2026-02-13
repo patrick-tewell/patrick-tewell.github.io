@@ -363,30 +363,37 @@ body {
 
 .card:nth-child(1) {
   transform: rotateY(0deg) translateZ(var(--card-radius));
+  border-width: 1px;
 }
 
 .card:nth-child(2) {
   transform: rotateY(51.43deg) translateZ(var(--card-radius));
+  border-width: 2px;
 }
 
 .card:nth-child(3) {
   transform: rotateY(102.86deg) translateZ(var(--card-radius));
+  border-width: 3px;
 }
 
 .card:nth-child(4) {
   transform: rotateY(154.29deg) translateZ(var(--card-radius));
+  border-width: 2px;
 }
 
 .card:nth-child(5) {
   transform: rotateY(205.71deg) translateZ(var(--card-radius));
+  border-width: 1px;
 }
 
 .card:nth-child(6) {
   transform: rotateY(257.14deg) translateZ(var(--card-radius));
+  border-width: 3px;
 }
 
 .card:nth-child(7) {
   transform: rotateY(308.57deg) translateZ(var(--card-radius));
+  border-width: 2px;
 }
 
 .card.orbit-back {
