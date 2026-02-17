@@ -16,7 +16,7 @@ body {
   --color-text: #e6efe5;
   --color-text-muted: rgba(230, 239, 229, 0.86);
   --accent-rgb: 212, 171, 70;
-  --color-accent: #d4ab46;
+  --color-accent: #d8ad41;
   --color-accent-dim: #b98f34;
   --color-accent-contrast: #ffffff;
   --color-accent-soft: rgba(var(--accent-rgb), 0.2);
@@ -223,13 +223,11 @@ body {
   left: 50%;
   width: 12.24em;
   height: 12.24em;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(-50px);
   background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(var(--accent-rgb), 0.6) 30%, rgba(var(--accent-rgb), 0.2) 60%, transparent 85%);
   border-radius: 50%;
   box-shadow: 0 0 40px rgba(var(--accent-rgb), 0.6), 0 0 80px rgba(var(--accent-rgb), 0.3), inset 0 0 40px rgba(var(--accent-rgb), 0.2);
   z-index: 1;
-  pointer-events: auto;
-  cursor: grab;
 }
 
 .orbit-sun:active {
@@ -277,6 +275,11 @@ body {
   height: 17.496em;
   background: var(--color-surface);
   padding: 1.44em;
+
+  border-color: var(--color-accent);
+  border-style: solid;
+  border-width: 0.5px;
+
   border-radius: 1.5em;
   backdrop-filter: blur(6px);
   transition: background 0.6s ease, filter 0.6s ease, scale 0.6s ease;
@@ -306,7 +309,6 @@ body {
   border-radius: 1em;
   overflow: hidden;
   background: transparent;
-  opacity: 0.75;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -369,7 +371,7 @@ body {
   left: 1.44em;
   right: 1.44em;
   margin: 0;
-  font-size: 1.1em;
+  font-size: 1.5em;
   text-align: center;
   font-weight: 700;
   max-width: calc(100% - 2.88em);
@@ -386,6 +388,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 1.5rem;
 }
 
 /* About */
